@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose =require("mongoose");
 const quranSchema =new mongoose.Schema({
 
     book:String,
@@ -15,5 +15,6 @@ const quranSchema =new mongoose.Schema({
 
 );
 
- const modals = mongoose.model("Quran", quranSchema);
-export default modals;
+ const quran = mongoose.model("Quran", quranSchema);
+
+module.exports = quran;

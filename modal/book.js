@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 const quranSchema = new mongoose.Schema({
   book: String,
   Author_Introduction: String,
@@ -10,4 +10,4 @@ const quranSchema = new mongoose.Schema({
 });
 
 const book = mongoose.model("Book", quranSchema);
-export default book
+module.exports = book;

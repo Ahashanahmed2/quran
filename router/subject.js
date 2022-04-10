@@ -1,14 +1,15 @@
-import express from "express";
+const express =require( "express");
 const Router = express.Router();
 
-import { pos, f1, f2, edite, delet } from "../control/post/subject.js";
 
-Router.post("/subject", pos);
-Router.get("/subject", f1);
+const { pos, f1, f2,listId, edite, delet } = require("../control/post/subject.js");
+Router.post("/", pos);
+Router.get("/", f1);
 
-Router.get("/subject/:id", f2);
-Router.put("/subject/edit/:id", edite);
-Router.delete("/subject/delete/:id", delet);
+Router.get("/:id", f2);
+Router.get("/list/:listId", listId);
+Router.put("/:id", edite);
+Router.delete("/:id", delet);
 
 
-export default Router;
+module.exports = Router;

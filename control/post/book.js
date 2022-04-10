@@ -1,7 +1,7 @@
-import Book from "../../modal/book.js";
+const Book = require("../../modal/book.js");
 
 //pos
-export const pos = async (req, res) => {
+exports.pos = async (req, res) => {
   const DB = new Book(req.body);
 
   try {
@@ -15,7 +15,7 @@ export const pos = async (req, res) => {
 };
 
 //f1
-export const f1 = async (req, res) => {
+exports.f1 = async (req, res) => {
   const DB = await Book.find();
 
   try {
@@ -27,53 +27,16 @@ export const f1 = async (req, res) => {
   }
 };
 
-
-
 //f2
-export const f2 = async (req, res) => {
+exports.f2 = async (req, res) => {
+  let i = req.params.id;
 
-    let i= req.query.id
-  
- let query = new RegExp(i,'igm')
 
-  const DB = await Book.find(
-    {
- 
-   
-    
-    $or: [
-      { book: query },
-      { Author_Introduction: query },
-      { Meaning_of_Revelation: query },
-      { History_of_Quran_Revelation: query },
-      { History_of_Preservation_of_Quran: query },
-      { Misconceptions_about_Tafsir: query },
-    ],
-    }
-  );
+
+  const DB = await Book.find({book:{ $regex: i}});
 
   try {
-      
-      res.status(200).json(DB);
-    } catch {
-      (err) => {
-        res.status(404).json({ message: err.message });
-      };
-    }
-  
-  
-};
-
-//edite
-export const edite = async (req, res) => {
- 
-  let id = req.query.id;
-  
-  
-  const DB = await Book.findByIdAndUpdate({ _id: id },req.body);
-
-  try {
-    res.status(200).send(DB);
+    res.status(200).json(DB);
   } catch {
     (err) => {
       res.status(404).json({ message: err.message });
@@ -81,13 +44,44 @@ export const edite = async (req, res) => {
   }
 };
 
-//delete
-export const delet = async (req, res) => {
-  let id = req.query.id;
-  const DB = await Book.findByIdAndDelete({ _id:id });
+//listId
+exports.listId = async (req, res) => {
+  let i = req.params.listId;
+
+  const DB = await Book.find({
+    _id: i,
+  });
 
   try {
-    
+    res.status(200).send(DB);
+  } catch {
+    (err) => {
+      res.status(404).json({ message: err });
+    };
+  }
+};
+
+//edite
+exports.edite = async (req, res) => {
+  let id = req.params.id;
+
+  const DB = await Book.findByIdAndUpdate({ _id: id }, req.body);
+
+  try {
+    res.status(200).send(DB);
+  } catch {
+    (err) => {
+      res.status(404).json({ message: err });
+    };
+  }
+};
+
+//delete
+exports.delet = async (req, res) => {
+  let id = req.params.id;
+  const DB = await Book.findByIdAndDelete({ _id: id });
+
+  try {
     res.status(200).send(DB);
   } catch {
     (err) => {

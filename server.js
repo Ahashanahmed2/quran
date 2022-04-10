@@ -1,24 +1,28 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import book from './router/book.js'
-import quran from './router/quran.js'
-import subject from './router/subject.js'
-import cors from 'cors'
+const express = require('express');
+// const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const book = require('./router/book');
+const quran = require('./router/quran');
+const subject = require('./router/subject');
+const dotenv = require('dotenv')
 const app = express();
+
+var cors = require("cors");
 dotenv.config()
 mongoose.connect(process.env.APP_SERVER, () => {
-    console.log('quran server connect')
-})
+  console.log("connected");
+});
+
+app.use(express.json())
 app.use(cors())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:false}))
-app.use('/',book)
-app.use('/',quran)
-app.use('/',subject)
+
+app.use('/book',book)
+app.use('/quran',quran)
+app.use('/subject',subject)
 
 app.listen(process.env.PORT, () => {
     console.log(`quran server conncet http://localhost:${process.env.PORT}`)
 })
+
+
 

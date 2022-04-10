@@ -1,14 +1,16 @@
-import express from "express";
+const express = require("express");
 const Router = express.Router();
 
+const { pos, f1,id,surah, edite, delet } = require("../control/post/quran.js");
 
-import { pos, f1, f2, edite, delet } from "../control/post/quran.js";
 
-Router.post("/quran", pos);
-Router.get("/quran", f1);
+Router.post("/", pos);
+Router.get("/", f1);
 
-Router.get("/quran/:id", f2);
-Router.put("/quran/edit/:id", edite);
-Router.delete("/quran/delete/:id", delet);
 
-export default Router;
+Router.get("/:id", id);
+Router.get("/surah/:surah", surah);
+Router.put("/:id", edite);
+Router.delete("/delete/:id", delet);
+
+module.exports = Router;

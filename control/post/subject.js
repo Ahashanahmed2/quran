@@ -1,7 +1,5 @@
-
-import Subject from "../../modal/subject.js";
-
-export const pos = async (req, res) => {
+const Subject = require("../../modal/subject.js");
+exports.pos = async (req, res) => {
   const DB = new Subject(req.body);
 
   try {
@@ -15,45 +13,59 @@ export const pos = async (req, res) => {
 };
 
 //f1
-export const f1 = async (req, res) => {
+exports.f1 = async (req, res) => {
   const DB = await Subject.find();
 
   try {
     res.status(200).send(DB);
   } catch {
     (err) => {
-      res.status(404).json({ message: err.message });
+      res.status(404).json({ message: err });
     };
   }
 };
 
 //f2
-export const f2 = async (req, res) => {
-  let i = req.query.id;
-
-  let query = new RegExp(i, "igm");
+exports.f2 = async (req, res) => {
+  let i = req.params.id;
 
   const DB = await Subject.find({
-   
-      book: query ,
-     name:query
-    
+    book:{$regex:i}
   });
 
   try {
-    res.status(200).json(DB);
+   
+    res.status(200).send(DB);
   } catch {
     (err) => {
-      res.status(404).json({ message: err.message });
+      res.status(404).json({ message: err });
+    };
+  }
+};
+
+
+//listId
+exports.listId = async (req, res) => {
+  let i = req.params.listId;
+
+  const DB = await Subject.find({
+    _id: i,
+  });
+
+  try {
+    res.status(200).send(DB);
+  } catch {
+    (err) => {
+      res.status(404).json({ message: err });
     };
   }
 };
 
 //edite
-export const edite = async (req, res) => {
-  let id = req.query.id;
+exports.edite = async (req, res) => {
+  let id = req.params.id;
 
-  const DB = await Subject.findByIdAndUpdate({ _id: id },rew.body);
+  const DB = await Subject.findByIdAndUpdate({ _id: id }, req.body);
 
   try {
     res.status(200).send(DB);
@@ -65,8 +77,8 @@ export const edite = async (req, res) => {
 };
 
 //delete
-export const delet = async (req, res) => {
-  let id = req.query.id;
+exports.delet = async (req, res) => {
+  let id = req.params.id;
   const DB = await Subject.findByIdAndDelete({ _id: id });
 
   try {
