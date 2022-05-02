@@ -1,4 +1,3 @@
-
 const Quran = require("../../modal/quran.js");
 exports.pos = async (req, res) => {
   const DB = new Quran(req.body);
@@ -30,8 +29,6 @@ exports.f1 = async (req, res) => {
 exports.id = async (req, res) => {
   let i = req.params.id;
 
- 
-
   const DB = await Quran.find({ book: { $regex: i } });
 
   try {
@@ -47,8 +44,126 @@ exports.id = async (req, res) => {
 exports.surah = async (req, res) => {
   let surah = req.params.surah;
 
-  const DB = await Quran.find({_id:surah });
- 
+  const DB = await Quran.find({ _id: surah });
+
+  try {
+    res.status(200).json(DB);
+  } catch {
+    (err) => {
+      res.status(404).json({ message: err });
+    };
+  }
+};
+
+//subject
+exports.subject = async (req, res) => {
+  let { book, subject } = req.params;
+
+  const DB = await Quran.find({
+    $and: [
+      { book: { $regex: book } },
+      {
+        $or: [
+          { verses: { $regex: subject } },
+          { summary: { $regex: subject } },
+          { ancillary_issues: { $regex: subject } },
+        ],
+      },
+    ],
+  });
+
+  try {
+    res.status(200).json(DB);
+  } catch {
+    (err) => {
+      res.status(404).json({ message: err });
+    };
+  }
+};
+
+//subjectPageOne
+exports.subjectPageOne = async (req, res) => {
+  let { subjectPageOne } = req.params;
+
+  const DB = await Quran.find({
+    $or: [
+      { verses: { $regex: subjectPageOne } },
+      { summary: { $regex: subjectPageOne } },
+      { ancillary_issues: { $regex: subjectPageOne } },
+    ],
+  });
+
+  try {
+    res.status(200).json(DB);
+  } catch {
+    (err) => {
+      res.status(404).json({ message: err });
+    };
+  }
+};
+
+//subjectThree
+exports.subjectThree = async (req, res) => {
+  let { book,surah,subject } = req.params;
+
+    const DB = await Quran.find({
+      $and: [
+        { book: { $regex: book } },
+        { name: { $regex: surah } },
+        
+        {
+          $or: [
+            { verses: { $regex: subject } },
+            { summary: { $regex: subject } },
+            { ancillary_issues: { $regex: subject } },
+          ],
+        },
+      ],
+    });
+
+  try {
+    res.status(200).json(DB);
+  } catch {
+    (err) => {
+      res.status(404).json({ message: err });
+    };
+  }
+};
+//subjectSurah
+exports.subjectSurah = async (req, res) => {
+  let { book, surah, subject } = req.params;
+
+  const DB = await Quran.find({
+    $and: [
+      { book: { $regex: book } },
+      { name: { $regex: surah } },
+      {
+        $or: [
+          { verses: { $regex: subject } },
+          { summary: { $regex: subject } },
+          { ancillary_issues: { $regex: subject } },
+        ],
+      },
+    ],
+  });
+
+  try {
+    res.status(200).json(DB);
+  } catch {
+    (err) => {
+      res.status(404).json({ message: err });
+    };
+  }
+};
+
+//surah1
+exports.surah1 = async (req, res) => {
+  const { books, surah } = req.params;
+
+  const DB = await Quran.find({
+    $and: [{ book: { $regex: books } }, { name: { $regex: surah } }],
+  });
+
   try {
     res.status(200).json(DB);
   } catch {
@@ -62,7 +177,7 @@ exports.surah = async (req, res) => {
 exports.edite = async (req, res) => {
   let id = req.params.id;
 
-  const DB = await Quran.findByIdAndUpdate({ _id: id },req.body);
+  const DB = await Quran.findByIdAndUpdate({ _id: id }, req.body);
 
   try {
     res.status(200).send(DB);
@@ -75,7 +190,6 @@ exports.edite = async (req, res) => {
 
 //delete
 exports.delet = async (req, res) => {
-console.log(req.params.id)
   let id = req.params.id;
   const DB = await Quran.findByIdAndDelete({ _id: id });
 
